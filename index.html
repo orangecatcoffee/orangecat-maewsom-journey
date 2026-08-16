@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>กาแฟแมวส้ม — เรื่องราวของเรา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Caveat:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7EDE0;
+    --cream-soft:#FCF6EC;
+    --brown:#5A361B;
+    --brown-deep:#2B180B;
+    --orange:#E8621A;
+    --orange-soft:#FBD9BE;
+    --line:rgba(90,54,27,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--brown);
+    font-family:'Noto Sans Thai','Mitr',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:480px;margin:0 auto;position:relative;padding-bottom:80px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:radial-gradient(120% 90% at 50% 0%, #3D2211 0%, var(--brown-deep) 60%, #1c0f07 100%);
+    color:var(--cream);
+    padding:56px 28px 64px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:'';position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);
+    width:280px;height:120px;
+    background:radial-gradient(ellipse, rgba(232,98,26,0.35) 0%, transparent 72%);
+  }
+  .hero-mascot{font-size:44px;display:inline-block;animation:bob 3.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);}}
+  .hero-eyebrow{
+    font-family:'Mitr',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--orange);margin:18px 0 10px;font-weight:500;
+  }
+  .hero h1{
+    font-family:'Mitr',sans-serif;font-size:30px;font-weight:600;line-height:1.35;
+    color:var(--cream);
+  }
+  .hero p{
+    margin-top:14px;font-size:14px;line-height:1.9;color:rgba(247,237,224,0.68);font-weight:300;
+  }
+  .hero-quote{
+    margin-top:22px;font-family:'Caveat',cursive;font-size:22px;color:var(--orange);font-weight:600;
+  }
+
+  /* ---------- CHAPTER NAV (folder tabs) ---------- */
+  .chapnav{
+    display:flex;position:sticky;top:0;z-index:40;background:var(--cream);
+    border-bottom:1px solid var(--line);
+  }
+  .chapnav a{
+    flex:1;text-align:center;padding:14px 4px;font-size:12px;font-weight:500;
+    font-family:'Mitr',sans-serif;color:rgba(90,54,27,0.4);text-decoration:none;
+    border-bottom:3px solid transparent;transition:.25s;
+  }
+  .chapnav a.c1.active,.chapnav a.c1:hover{color:var(--orange);border-color:var(--orange);}
+  .chapnav a.c2.active,.chapnav a.c2:hover{color:#B08A2E;border-color:#B08A2E;}
+  .chapnav a.c3.active,.chapnav a.c3:hover{color:#4A7A4E;border-color:#4A7A4E;}
+
+  /* ---------- CHAPTER HEADERS ---------- */
+  .chapter{padding:40px 24px 8px;}
+  .chap-eyebrow{font-family:'Caveat',cursive;font-size:20px;font-weight:600;}
+  .chap-title{font-family:'Mitr',sans-serif;font-size:22px;font-weight:600;margin-top:2px;}
+  .chap-sub{font-size:13px;color:rgba(90,54,27,0.6);margin-top:8px;line-height:1.7;}
+  .c1 .chap-eyebrow{color:var(--orange);} .c1 .chap-title{color:var(--brown);}
+  .c2 .chap-eyebrow{color:#B08A2E;} .c2 .chap-title{color:var(--brown);}
+  .c3 .chap-eyebrow{color:#4A7A4E;} .c3 .chap-title{color:var(--brown);}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;padding:28px 24px 12px 58px;}
+  .spine{
+    position:absolute;left:34px;top:0;bottom:0;width:2px;
+    background:linear-gradient(to bottom, var(--line), var(--line));
+  }
+  .spine-fill{
+    position:absolute;left:34px;top:0;width:2px;height:0;
+    background:linear-gradient(to bottom, var(--orange), transparent);
+    transition:height 1.2s ease;
+  }
+  .node{
+    position:relative;margin-bottom:30px;opacity:0;transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .node.visible{opacity:1;transform:translateY(0);}
+  .node-icon{
+    position:absolute;left:-58px;top:0;width:34px;height:34px;border-radius:50%;
+    background:var(--cream-soft);border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+    transition:.5s;z-index:2;
+  }
+  .node.visible .node-icon{border-color:var(--orange);background:var(--orange-soft);transform:scale(1.05);}
+  .node-card{
+    background:var(--cream-soft);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;
+  }
+  .node-date{font-family:'Caveat',cursive;font-size:15px;color:var(--orange);font-weight:600;}
+  .node-title{font-family:'Mitr',sans-serif;font-size:14.5px;font-weight:500;margin-top:2px;color:var(--brown);}
+  .node-text{font-size:12.5px;line-height:1.7;color:rgba(90,54,27,0.68);margin-top:6px;}
+  .node.pending .node-card{border-style:dashed;background:transparent;}
+  .node.pending .node-icon{border-style:dashed;opacity:.7;}
+  .node.pending .node-title{color:rgba(90,54,27,0.55);}
+
+  /* chapter 2 accent */
+  .c2 .node.visible .node-icon{border-color:#B08A2E;background:#F3E3BE;}
+  .c2 .spine-fill{background:linear-gradient(to bottom,#B08A2E,transparent);}
+
+  /* chapter 3 accent — growing sprout motif */
+  .c3 .node.visible .node-icon{border-color:#4A7A4E;background:#DCE9DA;}
+  .c3 .spine-fill{background:linear-gradient(to bottom,#4A7A4E,transparent);}
+  .sprout-bar{
+    margin:6px 0 0;height:6px;border-radius:6px;background:var(--line);overflow:hidden;
+  }
+  .sprout-fill{height:100%;background:#4A7A4E;width:0;transition:width 1.4s ease;border-radius:6px;}
+  .node.visible .sprout-fill{width:var(--pct);}
+
+  /* ---------- footer ---------- */
+  .footer{
+    text-align:center;padding:36px 24px 10px;
+  }
+  .footer-mascot{font-size:26px;}
+  .footer p{font-family:'Caveat',cursive;font-size:17px;color:rgba(90,54,27,0.55);margin-top:8px;}
+  .footer small{display:block;margin-top:10px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(90,54,27,0.3);}
+
+  @media (prefers-reduced-motion: reduce){
+    .node,.spine-fill,.sprout-fill,.hero-mascot{transition:none !important;animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-mascot">🐱</span>
+    <div class="hero-eyebrow">กาแฟแมวส้ม · Orange Cat Coffee</div>
+    <h1>ป๊อปอัพเล็กๆ<br>ที่ค่อยๆ โตทุกวันอาทิตย์</h1>
+    <p>เริ่มจากดิลิเวอรี่แก้วเดียวในนนทบุรี วันนี้มีทั้งระบบสั่งของ สมุดสะสม โอมากาเซะ และร้านจริงที่กำลังจะเกิดขึ้น — นำทีมโดยอาบุ้งงง แมวส้มเจ้าถิ่นของร้าน</p>
+    <div class="hero-quote">"ทุกแก้วมีที่มา ทุกระบบมีเหตุผล"</div>
+  </section>
+
+  <!-- CHAPTER NAV -->
+  <nav class="chapnav">
+    <a href="#ch1" class="c1 active">01 ระบบ</a>
+    <a href="#ch2" class="c2">02 เมนู</a>
+    <a href="#ch3" class="c3">03 ร้านจริง</a>
+  </nav>
+
+  <!-- CHAPTER 1: SYSTEM -->
+  <section class="chapter c1" id="ch1">
+    <div class="chap-eyebrow">บทที่หนึ่ง</div>
+    <div class="chap-title">ระบบที่สร้างมา — จากศูนย์สู่ทั้งนิเวศ</div>
+    <div class="chap-sub">ไม่มีอะไรเกิดขึ้นในวันเดียว — นี่คือเส้นทางของระบบหลังบ้านที่ทำให้ร้านเล็กๆ วิ่งได้เหมือนทีมใหญ่</div>
+  </section>
+  <div class="timeline c1" id="tl1">
+    <div class="spine"></div><div class="spine-fill"></div>
+
+    <div class="node"><div class="node-icon">🛒</div><div class="node-card">
+      <div class="node-date">จุดเริ่มต้น</div>
+      <div class="node-title">ระบบสั่งของ + สมัครสมาชิก</div>
+      <div class="node-text">order.html และ register.html — ให้ลูกค้าสั่งผ่าน LINE ได้เองครั้งแรก</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">☕</div><div class="node-card">
+      <div class="node-date">ต่อมา</div>
+      <div class="node-title">brew.html — มือขวาของบาริสต้า</div>
+      <div class="node-text">รับออเดอร์ ยืนยันชง ตัดสต็อกอัตโนมัติ ไม่ต้องจดมือแล้ว</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🏅</div><div class="node-card">
+      <div class="node-date">สร้างความผูกพัน</div>
+      <div class="node-title">สมุดสะสม + เหรียญ</div>
+      <div class="node-text">ลูกค้าเห็นเส้นทางของตัวเอง — เมนูที่ลอง, เมล็ดที่ชิม, ธีมที่ร่วมสนุก</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🗂️</div><div class="node-card">
+      <div class="node-date">แยกให้ชัด</div>
+      <div class="node-title">เครื่องมือหลังบ้าน 2 ชุด</div>
+      <div class="node-text">orangecat-ops (จัดซื้อ/สต็อก) กับ orangecat-owner (ยอดขาย/ลูกค้า) — คนละงาน คนละมุมมอง</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">💬</div><div class="node-card">
+      <div class="node-date">รู้จักลูกค้าจริงๆ</div>
+      <div class="node-title">Feedback + GTKY</div>
+      <div class="node-text">ถามความเห็นรายแก้ว และชวนคุยเรื่องที่ไม่เกี่ยวกับกาแฟเลยก็ได้</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🎴</div><div class="node-card">
+      <div class="node-date">ล่าสุด</div>
+      <div class="node-title">Omakase กลายเป็นสมาชิก</div>
+      <div class="node-text">จากสั่งทีละเซ็ต สู่ระบบสมัครสมาชิกรายสัปดาห์เต็มรูปแบบ</div>
+    </div></div>
+
+    <div class="node pending"><div class="node-icon">🌱</div><div class="node-card">
+      <div class="node-date">กำลังจะมา</div>
+      <div class="node-title">หน้าเล่าเรื่องเมล็ดกาแฟ + Orange OS</div>
+      <div class="node-text">ระบบที่ออกแบบจากร้านนี้ อาจกลายเป็นเครื่องมือให้ร้านกาแฟอื่นๆ ใช้ต่อได้ในอนาคต</div>
+    </div></div>
+  </div>
+
+  <!-- CHAPTER 2: MENU -->
+  <section class="chapter c2" id="ch2">
+    <div class="chap-eyebrow">บทที่สอง</div>
+    <div class="chap-title">เมนูที่ค่อยๆ วิวัฒน์</div>
+    <div class="chap-sub">จากแก้วมาตรฐาน สู่ความเซอร์ไพรส์ สู่ประสบการณ์ที่ออกแบบเฉพาะคน</div>
+  </section>
+  <div class="timeline c2" id="tl2">
+    <div class="spine"></div><div class="spine-fill"></div>
+
+    <div class="node"><div class="node-icon">🫘</div><div class="node-card">
+      <div class="node-date">แก้วแรก</div>
+      <div class="node-title">Comfort — เมนูประจำร้าน</div>
+      <div class="node-text">กาแฟ มัทฉะ ชาไทย โกโก้ — จุดเริ่มต้นของทุกอย่างที่ตามมา</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🐾</div><div class="node-card">
+      <div class="node-date">เพิ่มความสนุก</div>
+      <div class="node-title">แมวส้มเลือกหน่อย</div>
+      <div class="node-text">ให้บาริสต้าเลือกเมนูคอมฟอร์ตให้แทน — เซอร์ไพรส์เล็กๆ ในแก้วเดียว</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🔮</div><div class="node-card">
+      <div class="node-date">สุ่มทั้งใจ</div>
+      <div class="node-title">ไพ่ทาโร่</div>
+      <div class="node-text">สุ่มวัน สุ่มเมล็ด สุ่มเมนู — ความสุขจากสิ่งที่คาดเดาไม่ได้</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">✨</div><div class="node-card">
+      <div class="node-date">คัดสรรเฉพาะคน</div>
+      <div class="node-title">Omakase — 3 แก้วที่ Fah เลือกเอง</div>
+      <div class="node-text">แก้วที่ 3 คือเมนูทดลองใหม่ทุกสัปดาห์ ก่อนจะกลายเป็น Secret ประจำเซ็ต</div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🎟️</div><div class="node-card">
+      <div class="node-date">วันนี้</div>
+      <div class="node-title">Omakase Subscription — เลือกได้ 3 แพ็กเกจ</div>
+      <div class="node-text">Solo · Classic · Max — สมัครครั้งเดียว ดื่มได้ต่อเนื่องทุกสัปดาห์ตามจังหวะที่ใช่</div>
+    </div></div>
+  </div>
+
+  <!-- CHAPTER 3: RENOVATION -->
+  <section class="chapter c3" id="ch3">
+    <div class="chap-eyebrow">บทที่สาม</div>
+    <div class="chap-title">ร้านจริงที่กำลังงอก</div>
+    <div class="chap-sub">พื้นที่ 3×4 เมตร สไตล์ Warm & Cozy — วันนี้ยังเป็นแค่ร่างแบบ แต่จะค่อยๆ เติบโตทีละก้าว</div>
+  </section>
+  <div class="timeline c3" id="tl3">
+    <div class="spine"></div><div class="spine-fill"></div>
+
+    <div class="node"><div class="node-icon">📐</div><div class="node-card">
+      <div class="node-date">ตอนนี้</div>
+      <div class="node-title">ร่างแบบเสร็จแล้ว</div>
+      <div class="node-text">9 ที่นั่ง (5 เคาน์เตอร์ + 2 โต๊ะคู่) หน้าร้านกระจก โทนครีม-น้ำตาล-ส้ม</div>
+      <div class="sprout-bar"><div class="sprout-fill" style="--pct:22%"></div></div>
+    </div></div>
+
+    <div class="node"><div class="node-icon">🔨</div><div class="node-card">
+      <div class="node-date">กำลังทำ</div>
+      <div class="node-title">ติดต่อช่าง</div>
+      <div class="node-text">คุยรายละเอียดกับช่างก่อสร้าง เตรียมเข้าสู่ขั้นตอนลงมือจริง</div>
+      <div class="sprout-bar"><div class="sprout-fill" style="--pct:38%"></div></div>
+    </div></div>
+
+    <div class="node pending"><div class="node-icon">🧱</div><div class="node-card">
+      <div class="node-date">ขั้นต่อไป</div>
+      <div class="node-title">เริ่มก่อสร้าง</div>
+      <div class="node-text">โครงสร้าง งานระบบ และการตกแต่งตามร่างแบบ</div>
+      <div class="sprout-bar"><div class="sprout-fill" style="--pct:8%"></div></div>
+    </div></div>
+
+    <div class="node pending"><div class="node-icon">🌤️</div><div class="node-card">
+      <div class="node-date">เร็วๆ นี้</div>
+      <div class="node-title">เปิดหน้าร้านจริง</div>
+      <div class="node-text">จากป๊อปอัพวันอาทิตย์ สู่พื้นที่ที่ลูกค้านั่งดื่มกาแฟแมวส้มได้ทุกวัน</div>
+      <div class="sprout-bar"><div class="sprout-fill" style="--pct:3%"></div></div>
+    </div></div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-mascot">🐈</div>
+    <p>แล้วเจอกันวันอาทิตย์นะ</p>
+    <small>กาแฟแมวส้ม · Orange Cat Coffee</small>
+  </div>
+
+</div>
+
+<script>
+  // scroll reveal
+  const nodes = document.querySelectorAll('.node');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold:0.35});
+  nodes.forEach(n=>io.observe(n));
+
+  // spine fill per timeline, tied to scroll position within that timeline
+  const timelines = document.querySelectorAll('.timeline');
+  function updateSpines(){
+    timelines.forEach(tl=>{
+      const fill = tl.querySelector('.spine-fill');
+      const rect = tl.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = rect.height;
+      let progress = (vh*0.75 - rect.top) / total;
+      progress = Math.max(0, Math.min(1, progress));
+      fill.style.height = (progress*100) + '%';
+    });
+  }
+  window.addEventListener('scroll', updateSpines, {passive:true});
+  window.addEventListener('resize', updateSpines);
+  updateSpines();
+
+  // active chapter nav highlight
+  const chapters = document.querySelectorAll('.chapter');
+  const navLinks = document.querySelectorAll('.chapnav a');
+  const navObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navLinks.forEach(a=>a.classList.remove('active'));
+        const id = e.target.id;
+        document.querySelector(`.chapnav a[href="#${id}"]`)?.classList.add('active');
+      }
+    });
+  }, {threshold:0.5, rootMargin:'-20% 0px -60% 0px'});
+  chapters.forEach(c=>navObserver.observe(c));
+</script>
+
+</body>
+</html>
