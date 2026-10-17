@@ -72,6 +72,9 @@
   .chapnav a.c1.active,.chapnav a.c1:hover{color:var(--orange);border-color:var(--orange);}
   .chapnav a.c2.active,.chapnav a.c2:hover{color:#B08A2E;border-color:#B08A2E;}
   .chapnav a.c3.active,.chapnav a.c3:hover{color:#4A7A4E;border-color:#4A7A4E;}
+  .chapnav a.c4.active,.chapnav a.c4:hover{color:#2B4A7A;border-color:#2B4A7A;}
+  .chapnav a{white-space:nowrap;}
+  .chapnav a.c4{font-size:11px;padding-left:2px;padding-right:2px;}
 
   /* ---------- CHAPTER HEADERS ---------- */
   .chapter{padding:40px 24px 8px;}
@@ -81,6 +84,7 @@
   .c1 .chap-eyebrow{color:var(--orange);} .c1 .chap-title{color:var(--brown);}
   .c2 .chap-eyebrow{color:#B08A2E;} .c2 .chap-title{color:var(--brown);}
   .c3 .chap-eyebrow{color:#4A7A4E;} .c3 .chap-title{color:var(--brown);}
+  .c4 .chap-eyebrow{color:#2B4A7A;} .c4 .chap-title{color:var(--brown);}
 
   /* ---------- TIMELINE ---------- */
   .timeline{position:relative;padding:28px 24px 12px 58px;}
@@ -129,6 +133,16 @@
   .sprout-fill{height:100%;background:#4A7A4E;width:0;transition:width 1.4s ease;border-radius:6px;}
   .node.visible .sprout-fill{width:var(--pct);}
 
+  /* chapter 4: MAEWSOM OS — navy + orange */
+  .os-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:18px 24px 0;}
+  .os-stat{background:#14233D;color:#EAF0F8;border-radius:12px;padding:12px 6px;text-align:center;}
+  .os-stat b{display:block;font-family:'Mitr',sans-serif;font-size:22px;font-weight:600;color:#F28C38;line-height:1.1;}
+  .os-stat span{display:block;font-size:10.5px;line-height:1.4;margin-top:3px;color:rgba(234,240,248,.78);}
+  .os-frame{margin:18px 16px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#15121A;}
+  .os-frame iframe{display:block;width:100%;height:78vh;height:78svh;min-height:480px;border:0;}
+  .os-open{display:flex;justify-content:center;margin:14px 24px 0;}
+  .os-open a{font-family:'Mitr',sans-serif;font-size:13.5px;font-weight:500;color:#fff;background:#2B4A7A;text-decoration:none;padding:12px 22px;border-radius:999px;}
+
   /* ---------- footer ---------- */
   .footer{
     text-align:center;padding:36px 24px 10px;
@@ -160,6 +174,7 @@
     <a href="#ch1" class="c1 active">01 ระบบ</a>
     <a href="#ch2" class="c2">02 เมนู</a>
     <a href="#ch3" class="c3">03 ร้านจริง</a>
+    <a href="#ch4" class="c4">04 MAEWSOM OS</a>
   </nav>
 
   <!-- CHAPTER 1: SYSTEM -->
@@ -209,7 +224,7 @@
 
     <div class="node pending"><div class="node-icon">🌱</div><div class="node-card">
       <div class="node-date">กำลังจะมา</div>
-      <div class="node-title">หน้าเล่าเรื่องเมล็ดกาแฟ + Orange OS</div>
+      <div class="node-title">หน้าเล่าเรื่องเมล็ดกาแฟ + MAEWSOM OS</div>
       <div class="node-text">ระบบที่ออกแบบจากร้านนี้ อาจกลายเป็นเครื่องมือให้ร้านกาแฟอื่นๆ ใช้ต่อได้ในอนาคต</div>
     </div></div>
   </div>
@@ -291,6 +306,21 @@
       <div class="sprout-bar"><div class="sprout-fill" style="--pct:3%"></div></div>
     </div></div>
   </div>
+
+  <!-- CHAPTER 4: MAEWSOM OS -->
+  <section class="chapter c4" id="ch4">
+    <div class="chap-eyebrow">บทที่สี่</div>
+    <div class="chap-title">MAEWSOM OS — ระบบหลังบ้านของร้านเรา</div>
+    <div class="chap-sub">ระบบที่ร้านใช้จริงทุกวัน ตั้งแต่ลูกค้าสั่งใน LINE จนถึงงบกำไรขาดทุน เล่าผ่าน 3 บทบาท: ลูกค้า บาริสต้า และเจ้าของร้าน (หน้านี้เขียนเป็นภาษาอังกฤษ เพื่อชวนเจ้าของคาเฟ่อื่นมาดู)</div>
+  </section>
+  <div class="os-stats">
+    <div class="os-stat"><b>8</b><span>แอปในระบบ</span></div>
+    <div class="os-stat"><b>60</b><span>ตารางข้อมูล</span></div>
+    <div class="os-stat"><b>21</b><span>ระบบอัตโนมัติ</span></div>
+    <div class="os-stat"><b>6</b><span>งานตั้งเวลา</span></div>
+  </div>
+  <div class="os-frame"><iframe src="story.html" title="MAEWSOM OS" loading="lazy"></iframe></div>
+  <div class="os-open"><a href="story.html" target="_blank" rel="noopener">เปิดแบบเต็มหน้าจอ ↗</a></div>
 
   <div class="footer">
     <div class="footer-mascot">🐈</div>
