@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F2036">
+<title>MAEWSOM OS — ลองเล่นเดโม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0B1628;--surface:#12233D;--raised:#1A2F4F;--line:#2A4266;--text:#EAF0F8;--muted:#8FA3BF;--accent:#F28C38;--accent-text:#F28C38;--accent-soft:#3B2A1B;--on-accent:#1A0F05;--bar:#0F2036;--ok:#4CC38A;--bad:#F27D6B;--warn:#F2C14E;--info:#6FA8FF;--font:"IBM Plex Sans Thai","Noto Sans Thai",-apple-system,system-ui,sans-serif;--role:#F28C38}
+:root[data-theme="day"]{color-scheme:light;--bg:#EDF1F7;--surface:#FFFFFF;--raised:#E4EAF3;--line:#D3DBE8;--text:#0F1E36;--muted:#586A86;--accent:#E36F14;--accent-text:#C25A08;--accent-soft:#FDE8D6;--on-accent:#fff;--bar:#0F1E36;--ok:#1D8A5B;--bad:#C1432C;--warn:#A8700E;--info:#2358C4}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5}
+button{font-family:inherit;color:inherit;cursor:pointer}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+/* top */
+#top{position:sticky;top:0;z-index:30;background:var(--bar);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+#top b{font-size:16px;letter-spacing:.5px}#top .tag{font-size:10.5px;font-weight:700;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 9px}
+#top .sp{flex:1}
+.ib{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center}
+#fake{background:var(--accent-soft);color:var(--accent-text);font-size:12px;padding:6px 12px;text-align:center;border-bottom:1px solid var(--line)}
+/* missions */
+#mission{margin:10px 12px 0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+#mission .mh{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:8px}
+#mission .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.step{border:1px solid var(--line);background:var(--raised);border-radius:10px;padding:6px 2px;font-size:11px;text-align:center;line-height:1.3;color:var(--muted)}
+.step b{display:block;font-size:15px}.step.done{border-color:var(--ok);color:var(--ok);background:transparent}.step.now{border-color:var(--accent);color:var(--accent-text);font-weight:700}
+#hint{font-size:12.5px;margin-top:8px;color:var(--text)}
+/* role banner */
+#who{margin:10px 12px 0;border-radius:16px;padding:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--role) 28%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--role) 55%,var(--line))}
+#who .k{font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:600}
+#who h2{font-size:19px;margin:2px 0 2px}#who p{font-size:12.5px;color:var(--muted)}
+#who .fn{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}#who .fn span{font-size:11.5px;border:1px solid color-mix(in srgb,var(--role) 50%,var(--line));border-radius:999px;padding:2px 10px;background:var(--surface)}
+main{padding:10px 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.card h3{font-size:13px;margin-bottom:8px;color:var(--text)}
+.muted{color:var(--muted)}.sm{font-size:12px}
+.btn{border:none;background:var(--accent);color:var(--on-accent);font-weight:700;border-radius:12px;padding:12px 16px;min-height:46px;font-size:15px;width:100%}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--text);font-weight:500}
+.btn.sm{min-height:38px;padding:8px 12px;font-size:13px;width:auto;border-radius:10px}
+.chip{border:1px solid var(--line);background:none;border-radius:999px;padding:8px 14px;font-size:13.5px;min-height:38px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* nav */
+#roles{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bar);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+#roles button{background:none;border:none;color:rgba(255,255,255,.65);padding:6px 0;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;border-radius:12px}
+#roles button i{font-style:normal;font-size:20px}#roles button.on{color:#fff;background:color-mix(in srgb,var(--rc) 35%,transparent);font-weight:700}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#0F2036;color:#fff;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:92%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+/* customer */
+.chat{background:linear-gradient(var(--raised),var(--surface));border-radius:14px;padding:10px;margin-bottom:10px;max-height:300px;overflow-y:auto}
+.bub{max-width:82%;padding:8px 12px;border-radius:14px;font-size:13.5px;margin:6px 0;line-height:1.45;white-space:pre-line}
+.bub.shop{background:var(--surface);border:1px solid var(--line);border-top-left-radius:4px}.bub.me{background:#06C755;color:#04200E;margin-left:auto;border-top-right-radius:4px}
+.stars button{background:none;border:none;font-size:24px;padding:2px;color:var(--warn);min-width:36px;min-height:36px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mi{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px;text-align:left}
+.mi .em{font-size:32px;display:block;margin-bottom:4px}.mi b{font-size:14px;display:block;line-height:1.3}.mi span{font-size:13px;color:var(--accent-text);font-weight:700}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;display:none}.sheet-bg.open{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;background:var(--bg);border-radius:22px 22px 0 0;z-index:71;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .22s;max-height:88vh;overflow-y:auto}
+.sheet.open{transform:none}
+.lbl{font-size:12px;color:var(--muted);font-weight:600;margin:12px 0 6px}
+.stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stamp{aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:18px}.stamp.on{border:2px solid var(--accent);background:var(--accent-soft)}
+/* barista */
+.oc{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.oc .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.oc .t b{font-size:15px}.oc .d{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.oc.you{border-left-color:#06C755}.oc.done{opacity:.55;border-left-color:var(--ok)}
+.oc.mini .d,.oc.mini .btn{display:none}.oc.mini{padding:6px 12px}
+.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--muted)}
+/* owner */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px}
+.kpi span{font-size:11.5px;color:var(--muted)}.kpi b{display:block;font-size:22px;margin-top:2px}.kpi small{font-size:11.5px}
+.bar{height:8px;border-radius:99px;background:var(--raised);overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.chart{display:flex;align-items:flex-end;gap:4px;height:92px;margin-top:6px}.chart i{flex:1;background:var(--raised);border-radius:4px 4px 0 0;min-height:3px}.chart i.today{background:var(--accent)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--raised);border-radius:12px;padding:4px;margin-bottom:10px}.tabs button{border:none;background:none;padding:9px 0;border-radius:9px;font-size:13px;color:var(--muted)}.tabs button.on{background:var(--surface);color:var(--text);font-weight:700}
+.mrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}.mrow:first-of-type{border-top:none}.mrow .n{flex:1;min-width:0;font-size:13.5px;font-weight:600}.mrow .n small{display:block;color:var(--muted);font-weight:400;font-size:11.5px}
+.stp{display:flex;align-items:center;gap:6px}.stp button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--raised);font-size:17px}.stp b{min-width:48px;text-align:center}
+.lane{margin-bottom:12px}.lane h4{font-size:12.5px;margin-bottom:6px;color:var(--muted)}.task{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:9px 11px;margin-bottom:6px;font-size:13.5px;width:100%;text-align:left}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+/* admin / buyer */
+.sw{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.sw:first-of-type{border-top:none}.sw div{flex:1;font-size:13.5px}.sw small{display:block;color:var(--muted);font-size:11.5px}
+.tg{width:48px;height:28px;border-radius:99px;border:none;background:var(--raised);position:relative;flex:none}.tg::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}.tg.on{background:var(--ok)}.tg.on::after{left:23px}
+.brief{white-space:pre-line;font-size:13.5px;line-height:1.7;background:var(--raised);border-radius:12px;padding:12px}
+.idc{border:1px solid var(--line);border-radius:16px;padding:12px;background:linear-gradient(135deg,var(--raised),var(--surface))}.idc .h{font-size:10.5px;letter-spacing:1.5px;color:var(--accent-text);font-weight:700;margin-bottom:8px}
+.idc .ph{width:54px;height:64px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+.cta{border:1px solid var(--accent);background:var(--accent-soft);border-radius:16px;padding:16px;text-align:center;margin-bottom:10px}
+.cta a{display:block;margin-top:10px;background:var(--accent);color:var(--on-accent);font-weight:700;padding:13px;border-radius:12px;text-decoration:none}
+</style>
+</head>
+<body>
+<div id="top"><b>MAEWSOM OS</b><span class="tag">เดโม</span><span class="sp"></span><button class="ib" id="btnTheme" aria-label="สลับโหมดมืด/กลางวัน">◐</button><button class="ib" id="btnReset" aria-label="เริ่มใหม่">↺</button></div>
+<div id="fake">ข้อมูลทั้งหมดเป็นข้อมูลสมมติในเครื่องของคุณ · ไม่เชื่อมกับร้านจริง · ลองกดได้เต็มที่</div>
+<div id="mission"></div>
+<div id="who"></div>
+<main id="app"></main>
+<nav id="roles"></nav>
+<div id="toast"></div>
+<div class="sheet-bg" id="bg"></div><div class="sheet" id="sheet"></div>
+
+<script>
+(function () {
+  'use strict';
+  /* ---------------- data ---------------- */
+  const LINE_URL = 'https://lin.ee/pJFUoRX';
+  const MENU = [
+    { id: 'latte',  n: 'Iced Latte',        em: '🥛', p: 75,  c: 28, u: { bean: 18, milk: 150, syrup: 1, cup: 1 }, cof: true },
+    { id: 'amer',   n: 'Iced Americano',    em: '☕', p: 70,  c: 22, u: { bean: 18, syrup: 1, cup: 1 }, cof: true },
+    { id: 'dirty',  n: 'Dirty',             em: '🤎', p: 85,  c: 33, u: { bean: 18, milk: 120, syrup: 1, cup: 1 }, cof: true },
+    { id: 'matcha', n: 'Matcha Latte',      em: '🍵', p: 95,  c: 45, u: { matcha: 8, milk: 150, syrup: 1, cup: 1 } },
+    { id: 'cocoa',  n: 'Cocoa',             em: '🍫', p: 80,  c: 30, u: { cocoa: 25, milk: 150, syrup: 1, cup: 1 } },
+    { id: 'amber',  n: 'Amber Velvet',      em: '🍊', p: 135, c: 52, u: { bean: 18, milk: 120, syrup: 1, cup: 1 }, cof: true, sig: true },
+    { id: 'thai',   n: 'Thai Tea',          em: '🧋', p: 65,  c: 18, u: { tea: 12, milk: 100, syrup: 1, cup: 1 } },
+    { id: 'orange', n: 'Cold-pressed Orange', em: '🍊', p: 90, c: 40, u: { cup: 1, fruit: 250 } }
+  ];
+  const SWEET = { 'ไม่หวาน': 0, 'หวานน้อย': 7, 'หวานปกติ': 15 };
+  const STOCK_DEF = { bean: ['เมล็ดกาแฟ', 'g', 900, 3000, 1000], milk: ['นมสด', 'ml', 3000, 10000, 6000], matcha: ['ผงมัทฉะ', 'g', 120, 400, 300], cocoa: ['ผงโกโก้', 'g', 300, 1000, 800],
+    tea: ['ชาไทย', 'g', 200, 600, 500], fruit: ['ส้มสกัดเย็น', 'ml', 2000, 6000, 5000], syrup: ['ไซรัป', 'ml', 500, 1500, 1000], cup: ['แก้ว', 'ใบ', 40, 200, 100] };
+  const ROLES = [
+    { k: 'customer', em: '🧋', n: 'ลูกค้า', c: '#06C755', t: 'เครื่องมือของลูกค้า · แอปสั่งใน LINE', d: 'ลูกค้าสั่งเครื่องดื่มได้เองในแชท LINE ไม่ต้องโหลดแอป', fn: ['สั่งเมนูพร้อมรูป', 'เลือกความหวาน/นม', 'บัตรสะสม 10 แก้ว', 'ให้คะแนนหลังดื่ม'] },
+    { k: 'barista', em: '☕', n: 'บาริสต้า', c: '#F28C38', t: 'เครื่องมือของบาริสต้า · หน้าเตรียมชง', d: 'คิววันนี้ทั้งหมดในหน้าเดียว กดชงแล้ว ระบบตัดสต็อกให้เอง', fn: ['คิววันนี้', 'กด "ชงแล้ว" ตัดสต็อก', 'เพิ่มออเดอร์หน้าร้าน/Grab', 'หุบการ์ดให้เห็นง่าย'] },
+    { k: 'owner', em: '📊', n: 'เจ้าของ', c: '#6FA8FF', t: 'เครื่องมือของเจ้าของร้าน · ภาพรวมธุรกิจ', d: 'ยอดขาย กำไร เป้าหมาย ราคาเมนู และงานค้าง จากข้อมูลจริงของร้านทุกแก้ว', fn: ['ยอดขาย/กำไรสด', 'เป้าหมายเดือนนี้', 'ราคาเมนู + กำไรต่อแก้ว', 'บอร์ดงาน'] },
+    { k: 'buyer', em: '📦', n: 'จัดซื้อ', c: '#B58CFF', t: 'เครื่องมือจัดซื้อ & สต็อก', d: 'สต็อกลดเองตามที่ชงจริง เตือนของใกล้หมด และสั่งซื้อเข้า', fn: ['สต็อกแบบสด', 'เตือนของใกล้หมด', 'ใบสั่งซื้อแนะนำ', 'บันทึกซื้อเข้า'] },
+    { k: 'admin', em: '⚙️', n: 'แอดมิน', c: '#3DD6C6', t: 'เครื่องมือแอดมิน · ระบบอัตโนมัติ & ลูกค้า', d: 'สรุปเช้าส่งเอง ชวนลูกค้ากลับ การ์ดโปรไฟล์ลูกค้า และสวิตช์เปิด/ปิดระบบ', fn: ['สรุปเช้า', 'ชวนลูกค้ากลับ (มีเบรกอนุมัติ)', 'การ์ดโปรไฟล์ลูกค้า', 'สวิตช์ระบบอัตโนมัติ'] }
+  ];
+  const HIST = [18, 22, 19, 25, 28, 30, 16, 21, 24, 27, 26, 31, 20, 23];  // last 14 days, cups
+  const AVG_PRICE = 82, AVG_COST = 33, MONTH_BASE_CUPS = 142, TARGET_CUPS = 250;
+
+  /* ---------------- state ---------------- */
+  const KEY = 'maewsomDemo_v1';
+  const fresh = () => ({
+    role: 'customer', stock: Object.fromEntries(Object.entries(STOCK_DEF).map(([k, v]) => [k, v[4]])), nid: 100,
+    orders: [
+      { id: 1, who: 'พลอย', item: 'latte', sweet: 'หวานน้อย', milk: 'นมสด', ch: 'line', st: 'new', you: false, price: 75 },
+      { id: 2, who: 'ต้น', item: 'dirty', sweet: 'ไม่หวาน', milk: 'นมสด', ch: 'walk', st: 'new', you: false, price: 85 },
+      { id: 3, who: 'K. Mint', item: 'matcha', sweet: 'หวานปกติ', milk: 'นมโอ๊ต', ch: 'grab', st: 'new', you: false, price: 95 }],
+    chat: [{ s: 'shop', t: 'สวัสดีค่ะ 🐱 ยินดีต้อนรับสู่ร้านตัวอย่าง "แมวส้ม"\nเลือกเมนูด้านล่างแล้วสั่งได้เลย' }],
+    stamps: 7, ratings: [], purchases: 0, spend: 0,
+    sw: { brief: true, winback: true, birthday: false }, approvals: [], sent: 0,
+    tasks: [{ t: 'บันทึกค่าเช่าและค่าแรงเข้าระบบ', l: 'todo' }, { t: 'ตั้งราคา Standard ให้ลูกค้าออฟฟิศ', l: 'wait' }, { t: 'ทดลองเมนูใหม่: Pandan Coconut Latte', l: 'todo' }, { t: 'นับสต็อกเมล็ดกาแฟ', l: 'doing' }, { t: 'เปิดตัวเมนูฤดูหนาว', l: 'done' }],
+    prices: Object.fromEntries(MENU.map(m => [m.id, m.p])),
+    mis: { order: false, brew: false, owner: false, stock: false, admin: false }, ownerTab: 'ov', collapse: false, theme: 'dark', done: false
+  });
+  let S; try { S = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { S = fresh(); }
+  if (!S.mis) S = fresh();
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const baht = n => '฿' + Math.round(n).toLocaleString('th-TH');
+  const item = id => MENU.find(m => m.id === id);
+  const priceOf = id => S.prices[id];
+  const toast = t => { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('show'), 2600); };
+
+  /* ---------------- derived numbers ---------------- */
+  function today() {
+    const done = S.orders.filter(o => o.st === 'done');
+    const cups = done.length + 9;  // 9 cups already served earlier today (seed)
+    const net = done.reduce((s, o) => s + o.price, 0) + 9 * AVG_PRICE;
+    const cost = done.reduce((s, o) => s + (item(o.item).c), 0) + 9 * AVG_COST;
+    const gp = done.filter(o => o.ch === 'grab').reduce((s, o) => s + o.price * 0.321, 0);
+    return { cups, net, cost, gp, profit: net - cost - gp, live: done.length };
+  }
+  const chStats = () => {
+    const done = S.orders.filter(o => o.st === 'done'), by = { line: [0, 0], walk: [0, 0], grab: [0, 0] };
+    done.forEach(o => { const m = item(o.item); by[o.ch][0] += o.price; by[o.ch][1] += o.price * (o.ch === 'grab' ? 0.679 : 1) - m.c; });
+    return by;
+  };
+
+  /* ---------------- missions ---------------- */
+  const STEPS = [['order', '🧋', 'สั่งในฐานะลูกค้า'], ['brew', '☕', 'ชงในฐานะบาริสต้า'], ['owner', '📊', 'ดูยอดของเจ้าของ'], ['stock', '📦', 'ดูสต็อกที่ลดลง'], ['admin', '⚙️', 'ดูสรุปของแอดมิน']];
+  function mark(k) { const i = STEPS.findIndex(s => s[0] === k); if (S.mis[k] || (i > 0 && !S.mis[STEPS[i - 1][0]])) return; S.mis[k] = true; save(); renderMission(); if (STEPS.every(s => S.mis[s[0]])) { S.done = true; save(); render(); toast('🎉 ครบทุกเครื่องมือแล้ว!'); } }
+  function renderMission() {
+    const n = STEPS.filter(s => S.mis[s[0]]).length, next = STEPS.find(s => !S.mis[s[0]]);
+    const where = { order: 'customer', brew: 'barista', owner: 'owner', stock: 'buyer', admin: 'admin' };
+    const hints = { order: 'เริ่มที่นี่: เลือกเครื่องดื่มแล้วกด "สั่ง" ในฐานะลูกค้า', brew: 'ไปที่ ☕ บาริสต้า แล้วกด "ชงแล้ว" ที่แก้วของคุณ (แถบสีเขียว)', owner: 'ไปที่ 📊 เจ้าของ ดูว่ายอดขายและกำไรขยับแล้ว', stock: 'ไปที่ 📦 จัดซื้อ ดูว่าเมล็ดและนมลดลงตามที่ชงจริง', admin: 'ไปที่ ⚙️ แอดมิน ดูสรุปเช้าและการ์ดโปรไฟล์ของคุณ' };
+    $('mission').innerHTML = `<div class="mh"><span>ภารกิจ ${n}/5 · ข้อมูลชุดเดียว ใช้ทุกเครื่องมือ</span><span class="muted">${n === 5 ? 'ครบแล้ว 🎉' : ''}</span></div>
+      <div class="steps">${STEPS.map(s => `<button class="step ${S.mis[s[0]] ? 'done' : (next && next[0] === s[0] ? 'now' : '')}" data-go="${where[s[0]]}"><b>${S.mis[s[0]] ? '✓' : s[1]}</b>${s[2]}</button>`).join('')}</div>
+      ${next ? `<div id="hint">👉 ${hints[next[0]]}</div>` : ''}`;
+  }
+
+  /* ---------------- role banner + nav ---------------- */
+  function renderChrome() {
+    const r = ROLES.find(x => x.k === S.role); document.documentElement.style.setProperty('--role', r.c);
+    $('who').innerHTML = `<div class="k">คุณกำลังอยู่ในเครื่องมือของ</div><h2>${r.em} ${r.n}</h2><p>${r.d}</p><div class="fn">${r.fn.map(f => `<span>${f}</span>`).join('')}</div>`;
+    $('roles').innerHTML = ROLES.map(x => `<button data-go="${x.k}" class="${x.k === S.role ? 'on' : ''}" style="--rc:${x.c}"><i>${x.em}</i>${x.n}</button>`).join('');
+    document.documentElement.setAttribute('data-theme', S.theme === 'day' ? 'day' : '');
+    if (S.theme !== 'day') document.documentElement.removeAttribute('data-theme');
+  }
+
+  /* ---------------- customer ---------------- */
+  function vCustomer() {
+    const stamps = S.stamps % 10, free = S.stamps >= 10 && S.stamps % 10 === 0;
+    return `<div class="card"><h3>💬 แชท LINE กับร้าน (ตัวอย่าง)</h3><div class="chat" id="chat">${S.chat.map((b, i) => `<div class="bub ${b.s}">${esc(b.t)}${b.rate ? `<div class="stars" data-rate="${i}">${[1, 2, 3, 4, 5].map(n => `<button data-star="${n}" data-i="${i}">${b.v && n <= b.v ? '★' : '☆'}</button>`).join('')}</div>` : ''}</div>`).join('')}</div></div>
+      <div class="card"><h3>🐱 เมนูวันนี้</h3><div class="menu">${MENU.map(m => `<button class="mi" data-pick="${m.id}"><span class="em">${m.em}</span><b>${m.n}</b><span>${baht(priceOf(m.id))}</span></button>`).join('')}</div></div>
+      <div class="card"><h3>🎫 บัตรสะสมของคุณ <span class="muted sm">ครบ 10 แก้ว ฟรี 1 แก้ว</span></h3><div class="stamps">${Array.from({ length: 10 }, (_, i) => `<div class="stamp ${i < stamps || free ? 'on' : ''}">${i < stamps || free ? '🐾' : i + 1}</div>`).join('')}</div>
+      <p class="sm muted" style="margin-top:8px">${stamps === 0 && S.stamps ? '🎁 ครบแล้ว! แก้วต่อไปฟรี' : `อีก ${10 - stamps} แก้วได้แก้วฟรี · ทุกแก้วที่ชงแล้วประทับให้อัตโนมัติ`}</p></div>`;
+  }
+  function openPick(id) {
+    const m = item(id); S._pick = { id, sweet: 'หวานน้อย', milk: 'นมสด', day: 'วันนี้' };
+    $('sheet').innerHTML = `<div class="row" style="justify-content:space-between"><b style="font-size:17px">${m.em} ${m.n}</b><button class="ib" style="color:var(--text);border-color:var(--line)" data-close="1">✕</button></div>
+      <div class="lbl">ความหวาน</div><div class="row">${Object.keys(SWEET).map(k => `<button class="chip ${k === 'หวานน้อย' ? 'on' : ''}" data-opt="sweet" data-v="${k}">${k}</button>`).join('')}</div>
+      ${m.u.milk ? `<div class="lbl">นม</div><div class="row">${['นมสด', 'นมโอ๊ต (+5)'].map(k => `<button class="chip ${k === 'นมสด' ? 'on' : ''}" data-opt="milk" data-v="${k}">${k}</button>`).join('')}</div>` : ''}
+      <div class="lbl">รับวันไหน</div><div class="row">${['วันนี้', 'พรุ่งนี้'].map(k => `<button class="chip ${k === 'วันนี้' ? 'on' : ''}" data-opt="day" data-v="${k}">${k}</button>`).join('')}</div>
+      <button class="btn" style="margin-top:18px" data-order="1">สั่งเลย · ${baht(priceOf(id))}</button>`;
+    $('bg').classList.add('open'); $('sheet').classList.add('open');
+  }
+  const closeSheet = () => { $('bg').classList.remove('open'); $('sheet').classList.remove('open'); };
+  function placeOrder() {
+    const p = S._pick; if (!p) return; const m = item(p.id), oat = /โอ๊ต/.test(p.milk);
+    S.orders.push({ id: ++S.nid, who: 'คุณ (ผู้ชม)', item: p.id, sweet: p.sweet, milk: m.u.milk ? p.milk.replace(' (+5)', '') : '', ch: 'line', st: 'new', you: true, price: priceOf(p.id) + (oat ? 5 : 0), day: p.day });
+    S.chat.push({ s: 'me', t: `สั่ง ${m.n}\n${p.sweet}${m.u.milk ? ' · ' + p.milk.replace(' (+5)', '') : ''} · รับ${p.day}` });
+    S.chat.push({ s: 'shop', t: `รับออเดอร์แล้วค่ะ ✅\n${m.n} ${baht(priceOf(p.id) + (oat ? 5 : 0))}\nบาริสต้าเห็นออเดอร์ของคุณในคิวแล้ว` });
+    closeSheet(); save(); mark('order'); render(); toast('ส่งออเดอร์แล้ว → ไปดูที่ฝั่งบาริสต้า'); setTimeout(() => { const c = $('chat'); if (c) c.scrollTop = c.scrollHeight; }, 50);
+  }
+
+  /* ---------------- barista ---------------- */
+  function ordCard(o) {
+    const m = item(o.item), chn = { line: 'LINE', walk: 'หน้าร้าน', grab: 'Grab' }[o.ch];
+    return `<div class="oc ${o.you ? 'you' : ''} ${o.st === 'done' ? 'done' : ''} ${S.collapse && o.st !== 'done' ? 'mini' : ''}" data-oc="${o.id}"><div class="t"><b>${esc(o.who)}</b><span class="pill">${chn}</span></div>
+      <div class="d">${m.em} ${m.n} · ${o.sweet}${o.milk ? ' · ' + o.milk : ''} · ${baht(o.price)}</div>${o.st === 'new' ? `<button class="btn" data-brew="${o.id}">ชงแล้ว</button>` : ''}</div>`;
+  }
+  function vBarista() {
+    const nw = S.orders.filter(o => o.st === 'new'), dn = S.orders.filter(o => o.st === 'done').slice(-4).reverse();
+    return `<div class="card"><div class="row" style="justify-content:space-between"><b>คิววันนี้ · รอชง ${nw.length} แก้ว</b><button class="btn sm ghost" data-collapse="1">${S.collapse ? '▦ ขยายทั้งหมด' : '▤ หุบทั้งหมด'}</button></div>
+      <p class="sm muted" style="margin-top:4px">บาริสต้าไม่เห็นต้นทุนหรือกำไร เห็นแค่สิ่งที่ต้องชง · แก้วของคุณมีแถบสีเขียว</p></div>
+      ${nw.length ? nw.map(ordCard).join('') : '<div class="card muted" style="text-align:center">ไม่มีแก้วค้างคิว ✨ ลองสั่งจากฝั่งลูกค้า หรือเพิ่มออเดอร์หน้าร้านด้านล่าง</div>'}
+      <div class="card"><h3>➕ เพิ่มออเดอร์หน้าร้าน / Grab</h3><div class="row">${MENU.slice(0, 4).map(m => `<button class="chip" data-quick="${m.id}">${m.em} ${m.n}</button>`).join('')}</div>
+      <div class="row" style="margin-top:8px"><button class="chip on" data-qch="walk" id="qw">หน้าร้าน</button><button class="chip" data-qch="grab" id="qg">Grab (คอมมิชชั่น 32%)</button></div></div>
+      ${dn.length ? `<div class="card"><h3>✅ ชงเสร็จล่าสุด</h3>${dn.map(ordCard).join('')}</div>` : ''}`;
+  }
+  function brew(id) {
+    const o = S.orders.find(x => x.id === id); if (!o || o.st !== 'new') return; const m = item(o.item), used = [];
+    Object.entries(m.u).forEach(([k, v]) => { let q = v; if (k === 'syrup') q = SWEET[o.sweet] || 0; if (q) { S.stock[k] = Math.max(0, S.stock[k] - q); used.push(`${STOCK_DEF[k][0]} -${q}${STOCK_DEF[k][1]}`); } });
+    o.st = 'done'; if (o.you) { S.stamps++; S.chat.push({ s: 'shop', t: `${m.n} ของคุณพร้อมแล้ว ☕\nอร่อยไหมคะ? ให้คะแนนได้เลย`, rate: true, v: 0 }); }
+    save(); if (o.you) mark('brew'); render(); toast('ชงแล้ว · ตัดสต็อก: ' + (used.join(', ') || '-'));
+  }
+  function quickAdd(id) { const m = item(id), ch = S._qch || 'walk'; S.orders.push({ id: ++S.nid, who: ch === 'grab' ? 'ลูกค้า Grab' : 'ลูกค้าหน้าร้าน', item: id, sweet: 'ไม่หวาน', milk: m.u.milk ? 'นมสด' : '', ch, st: 'new', you: false, price: priceOf(id) }); save(); render(); toast('เพิ่มออเดอร์ ' + m.n); }
+
+  /* ---------------- owner ---------------- */
+  const margin = m => { const p = priceOf(m.id); return (p - m.c) / p * 100; };
+  function vOwner() {
+    const t = today(), mtd = MONTH_BASE_CUPS + t.cups, pct = Math.min(100, mtd / TARGET_CUPS * 100), by = chStats(), liveCups = t.live;
+    const tabs = `<div class="tabs">${[['ov', 'ภาพรวม'], ['menu', 'เมนู & ราคา'], ['board', 'บอร์ดงาน']].map(([k, n]) => `<button data-otab="${k}" class="${S.ownerTab === k ? 'on' : ''}">${n}</button>`).join('')}</div>`;
+    if (S.ownerTab === 'menu') return tabs + `<div class="card"><h3>ราคาเมนู · กำไรต่อแก้วคำนวณจากสูตรจริง</h3>${MENU.map(m => { const g = margin(m); return `<div class="mrow"><div class="n">${m.em} ${m.n}<small>ต้นทุน ${baht(m.c)} · กำไร ${baht(priceOf(m.id) - m.c)}</small></div><div class="stp"><button data-pr="${m.id}" data-d="-5">−</button><b>${baht(priceOf(m.id))}</b><button data-pr="${m.id}" data-d="5">+</button></div><span class="pill ${g >= 55 ? 'ok' : g >= 45 ? 'warn' : 'bad'}">${g.toFixed(0)}%</span></div>`; }).join('')}<p class="sm muted" style="margin-top:8px">ลองเปลี่ยนราคา แล้วสั่งใหม่ในฝั่งลูกค้า ราคาใหม่ใช้ทันที</p></div>`;
+    if (S.ownerTab === 'board') return tabs + [['wait', '⏸ รอตัดสินใจ'], ['todo', '📥 รอทำ'], ['doing', '🔥 กำลังทำ'], ['done', '✅ เสร็จแล้ว']].map(([l, n]) => `<div class="lane"><h4>${n}</h4>${S.tasks.map((k, i) => k.l === l ? `<button class="task" data-task="${i}">${esc(k.t)}${l !== 'done' ? ' <span class="muted sm">· แตะเพื่อไปช่องถัดไป</span>' : ''}</button>` : '').join('') || '<div class="sm muted">—</div>'}</div>`).join('');
+    return tabs + `<div class="kpis"><div class="kpi"><span>แก้ววันนี้</span><b>${t.cups}</b><small class="${liveCups ? 'ok' : 'muted'}">${liveCups ? '+' + liveCups + ' จากที่เพิ่งชง' : 'รอแก้วแรกของคุณ'}</small></div>
+      <div class="kpi"><span>ยอดขายวันนี้</span><b>${baht(t.net)}</b><small class="muted">ก่อนหักต้นทุน</small></div>
+      <div class="kpi"><span>กำไรวันนี้</span><b class="${t.profit > 0 ? 'ok' : 'bad'}">${baht(t.profit)}</b><small class="muted">${(t.profit / t.net * 100).toFixed(0)}% ของยอดขาย</small></div>
+      <div class="kpi"><span>เฉลี่ยต่อแก้ว</span><b>${baht(t.net / t.cups)}</b><small class="muted">เป้า ฿80</small></div></div>
+      <div class="card"><h3>🎯 เป้าหมายเดือนนี้ · ${mtd}/${TARGET_CUPS} แก้ว</h3><div class="bar"><i style="width:${pct}%"></i></div><p class="sm muted" style="margin-top:6px">${pct.toFixed(0)}% ของเป้า · ต้องอีก ${Math.max(0, TARGET_CUPS - mtd)} แก้ว</p></div>
+      <div class="card"><h3>แก้วต่อวัน · 14 วันล่าสุด + วันนี้</h3><div class="chart">${HIST.map(v => `<i style="height:${v / 34 * 100}%"></i>`).join('')}<i class="today" style="height:${Math.min(100, t.cups / 34 * 100)}%"></i></div></div>
+      <div class="card"><h3>กำไรแยกช่องทาง (ของแก้วที่ชงตอนนี้)</h3>${[['line', 'LINE'], ['walk', 'หน้าร้าน'], ['grab', 'Grab (หักคอมมิชชั่น)']].map(([k, n]) => `<div class="mrow"><div class="n">${n}</div><span class="muted sm">ขาย ${baht(by[k][0])}</span><b class="${by[k][1] >= 0 ? 'ok' : 'bad'}">${baht(by[k][1])}</b></div>`).join('')}<p class="sm muted" style="margin-top:6px">ลองเพิ่มออเดอร์ Grab ที่ฝั่งบาริสต้า แล้วชง จะเห็นกำไรต่อแก้วต่างจากหน้าร้านชัดเจน</p></div>`;
+  }
+
+  /* ---------------- buyer ---------------- */
+  function vBuyer() {
+    const low = Object.keys(STOCK_DEF).filter(k => S.stock[k] < STOCK_DEF[k][2]);
+    return `<div class="card"><h3>สต็อกสด · ลดเองทุกครั้งที่บาริสต้ากดชง</h3>${Object.entries(STOCK_DEF).map(([k, d]) => { const v = S.stock[k], pct = Math.min(100, v / d[3] * 100), isLow = v < d[2];
+      return `<div class="mrow" style="align-items:flex-start"><div class="n">${d[0]}<small class="${isLow ? 'bad' : ''}">${Math.round(v).toLocaleString('th-TH')} ${d[1]}${isLow ? ' · ต่ำกว่าระดับเตือน ⚠️' : ''}</small><div class="bar" style="margin-top:6px"><i style="width:${pct}%;background:${isLow ? 'var(--bad)' : 'var(--accent)'}"></i></div></div><button class="btn sm ghost" data-buy="${k}">+ ซื้อเข้า</button></div>`; }).join('')}</div>
+      <div class="card"><h3>🧾 ใบสั่งซื้อแนะนำ</h3>${low.length ? low.map(k => `<div class="mrow"><div class="n">${STOCK_DEF[k][0]}<small>สั่งเพิ่ม ${STOCK_DEF[k][4].toLocaleString('th-TH')} ${STOCK_DEF[k][1]}</small></div><span class="pill bad">ใกล้หมด</span></div>`).join('') : '<p class="sm muted">ยังไม่มีของใกล้หมด · ลองชงหลายแก้วเพื่อดูการเตือน</p>'}<p class="sm muted" style="margin-top:6px">ซื้อเข้าแล้ว ${S.purchases} ครั้ง · ${baht(S.spend)}</p></div>`;
+  }
+  function buy(k) { const d = STOCK_DEF[k]; S.stock[k] += d[4]; S.purchases++; S.spend += Math.round(d[4] * 0.12); save(); render(); toast(`ซื้อเข้า ${d[0]} +${d[4].toLocaleString('th-TH')}${d[1]}`); }
+
+  /* ---------------- admin ---------------- */
+  function brief() {
+    const nw = S.orders.filter(o => o.st === 'new').length, low = Object.keys(STOCK_DEF).filter(k => S.stock[k] < STOCK_DEF[k][2]).map(k => STOCK_DEF[k][0]), t = today();
+    return `☀️ อรุณสวัสดิ์ — สรุปของร้าน (ตัวอย่าง)\n\n☕ รอชงอยู่: ${nw} แก้ว\n📊 วันนี้: ${t.cups} แก้ว · ${baht(t.net)} · กำไร ${baht(t.profit)}\n🟡 ใกล้หมด: ${low.length ? low.join(', ') : 'ไม่มี'}\n👋 เงียบไป 2 สัปดาห์: Nan, Pete\n⭐ คะแนนล่าสุด: ${S.ratings.length ? (S.ratings.reduce((a, b) => a + b, 0) / S.ratings.length).toFixed(1) + ' (' + S.ratings.length + ' คน)' : 'ยังไม่มี'}\n🤖 ระบบส่งเอง: ขอรีวิว ${S.ratings.length} ครั้ง`;
+  }
+  function persona() {
+    const mine = S.orders.filter(o => o.you && o.st === 'done'); if (!mine.length) return '<p class="sm muted">ยังไม่มีข้อมูล — ลองสั่งและชงแก้วของคุณก่อน แล้วการ์ดนี้จะสร้างจากพฤติกรรมของคุณเอง</p>';
+    const mode = a => { const c = {}; a.forEach(x => c[x] = (c[x] || 0) + 1); return Object.entries(c).sort((x, y) => y[1] - x[1])[0]; };
+    const fav = mode(mine.map(o => item(o.item).n)), sw = mode(mine.map(o => o.sweet)), ml = mode(mine.filter(o => o.milk).map(o => o.milk)), rate = S.ratings.length ? S.ratings[S.ratings.length - 1] : null;
+    const tip = item(mine[0].item).cof ? 'แนะนำเมล็ดตัวใหม่ให้ลองก่อนใคร' : 'แนะนำเมนูใหม่ที่ไม่ใช้กาแฟ';
+    return `<div class="idc"><div class="h">MAEWSOM · บัตรลูกค้า</div><div class="row" style="flex-wrap:nowrap"><div class="ph">🙂</div><div><b style="font-size:16px">คุณ (ผู้ชม)</b><div class="sm" style="color:var(--accent-text);font-weight:700">สายที่ชอบ ${esc(fav[0])}</div><div class="sm muted">สร้างจากพฤติกรรมที่เพิ่งสั่งจริง</div></div></div>
+      <div class="kpis" style="margin:10px 0 0"><div class="kpi"><span>เมนูประจำ</span><b style="font-size:15px">${esc(fav[0])}</b></div><div class="kpi"><span>ความหวาน</span><b style="font-size:15px">${esc(sw[0])}</b></div><div class="kpi"><span>นม</span><b style="font-size:15px">${esc(ml ? ml[0] : 'ไม่ใช้นม')}</b></div><div class="kpi"><span>คะแนนที่ให้</span><b style="font-size:15px">${rate ? '⭐ ' + rate : '–'}</b></div></div>
+      <p class="sm" style="margin-top:10px">🎯 <b>กลยุทธ์:</b> ${tip} · ครั้งหน้า ระบบเลือกเมนูและความหวานนี้ให้เป็นค่าเริ่มต้น บาริสต้าไม่ต้องจำ</p></div>`;
+  }
+  const tgl = (k, n, d) => `<div class="sw"><div>${n}<small>${d}</small></div><button class="tg ${S.sw[k] ? 'on' : ''}" data-sw="${k}" aria-label="${n}"></button></div>`;
+  function vAdmin() {
+    return `<div class="card"><h3>🤖 ระบบอัตโนมัติ (เปิด/ปิดได้)</h3>${tgl('brief', 'สรุปเช้า ส่งให้เจ้าของทุกวัน', 'ที่ต้องชง · ของใกล้หมด · ลูกค้าเงียบ')}${tgl('winback', 'ชวนลูกค้าที่หายไปกลับมา', 'ส่งหลังเงียบ 14 วัน')}${tgl('birthday', 'ข้อความวันเกิด + ของขวัญ', 'ส่งตอนเช้าวันเกิด')}</div>
+      <div class="card"><h3>☀️ สรุปเช้า (สร้างสดจากข้อมูลของคุณตอนนี้)</h3>${S.sw.brief ? `<div class="brief">${esc(brief())}</div>` : '<p class="sm muted">ปิดอยู่ — เปิดสวิตช์ด้านบนเพื่อดู</p>'}</div>
+      <div class="card"><h3>👋 ชวนลูกค้ากลับ · มีเบรกกันส่งพลาด</h3><p class="sm muted" style="margin-bottom:8px">ส่งไม่เกิน 5 คนส่งเลย ถ้าเกิน ระบบหยุดรอเจ้าของอนุมัติ</p><div class="row"><button class="btn sm" data-send="3">ส่ง 3 คน</button><button class="btn sm ghost" data-send="8">ส่ง 8 คน</button></div><div id="sendlog" class="sm" style="margin-top:8px">${S.sentMsg ? esc(S.sentMsg) : ''}</div>${S.pending ? `<div class="row" style="margin-top:8px"><button class="btn sm" data-ap="1">อนุมัติ</button><button class="btn sm ghost" data-ap="0">ยกเลิก</button></div>` : ''}</div>
+      <div class="card"><h3>🪪 การ์ดโปรไฟล์ลูกค้า</h3>${persona()}</div>
+      <div class="card"><h3>⭐ ฟีดแบ็คล่าสุด</h3>${S.ratings.length ? S.ratings.slice(-5).reverse().map(r => `<div class="mrow"><div class="n">คุณ (ผู้ชม)</div><b>${'★'.repeat(r)}${'☆'.repeat(5 - r)}</b></div>`).join('') : '<p class="sm muted">ยังไม่มี — ให้คะแนนในแชทฝั่งลูกค้าหลังชงเสร็จ</p>'}</div>`;
+  }
+
+  /* ---------------- render ---------------- */
+  function render() {
+    renderChrome(); renderMission();
+    const v = { customer: vCustomer, barista: vBarista, owner: vOwner, buyer: vBuyer, admin: vAdmin }[S.role]();
+    const cta = S.done ? `<div class="cta"><b>ครบทุกเครื่องมือแล้ว 🎉</b><div class="sm muted" style="margin-top:4px">ทั้งหมดนี้คือระบบเดียวกัน ข้อมูลชุดเดียว ทำงานอยู่จริงในร้านกาแฟ</div><a href="${LINE_URL}" target="_blank" rel="noopener">อยากได้ระบบแบบนี้? คุยกับเราทาง LINE</a></div>` : '';
+    $('app').innerHTML = cta + v;
+    if (S.role === 'owner') mark('owner'); if (S.role === 'buyer') mark('stock'); if (S.role === 'admin') mark('admin');
+    const c = $('chat'); if (c) c.scrollTop = c.scrollHeight;
+  }
+
+  /* ---------------- events ---------------- */
+  document.addEventListener('click', e => {
+    const t = e.target, q = s => t.closest(s);
+    let b;
+    if ((b = q('[data-go]'))) { S.role = b.dataset.go; save(); render(); window.scrollTo(0, 0); return; }
+    if (q('[data-close]') || t.id === 'bg') return closeSheet();
+    if ((b = q('[data-pick]'))) return openPick(b.dataset.pick);
+    if ((b = q('[data-opt]'))) { S._pick[b.dataset.opt] = b.dataset.v; b.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b)); return; }
+    if (q('[data-order]')) return placeOrder();
+    if ((b = q('[data-star]'))) { const i = +b.dataset.i, n = +b.dataset.star; if (S.chat[i] && !S.chat[i].v) { S.chat[i].v = n; S.ratings.push(n); S.chat.push({ s: 'shop', t: n >= 4 ? 'ขอบคุณมากค่ะ 🧡 แมวส้มดีใจ!' : 'ขอบคุณที่บอกนะคะ เราจะปรับปรุงค่ะ 🙏' }); save(); render(); } return; }
+    if ((b = q('[data-brew]'))) return brew(+b.dataset.brew);
+    if (q('[data-collapse]')) { S.collapse = !S.collapse; save(); return render(); }
+    if ((b = q('[data-qch]'))) { S._qch = b.dataset.qch; document.querySelectorAll('[data-qch]').forEach(c => c.classList.toggle('on', c === b)); return; }
+    if ((b = q('[data-quick]'))) return quickAdd(b.dataset.quick);
+    if ((b = q('[data-otab]'))) { S.ownerTab = b.dataset.otab; save(); return render(); }
+    if ((b = q('[data-pr]'))) { S.prices[b.dataset.pr] = Math.max(10, S.prices[b.dataset.pr] + +b.dataset.d); save(); return render(); }
+    if ((b = q('[data-task]'))) { const k = S.tasks[+b.dataset.task], ord = ['wait', 'todo', 'doing', 'done']; if (k.l !== 'done') { k.l = ord[ord.indexOf(k.l) + 1]; save(); render(); } return; }
+    if ((b = q('[data-buy]'))) return buy(b.dataset.buy);
+    if ((b = q('[data-sw]'))) { S.sw[b.dataset.sw] = !S.sw[b.dataset.sw]; save(); return render(); }
+    if ((b = q('[data-send]'))) { const n = +b.dataset.send; if (n > 5) { S.pending = n; S.sentMsg = `⏸ ${n} คนเกิน 5 → หยุดรอเจ้าของอนุมัติ · ยังไม่ส่งอะไร`; } else { S.sentMsg = `✅ ${n} คน ≤ 5 → ส่งอัตโนมัติแล้ว`; S.pending = 0; } save(); return render(); }
+    if ((b = q('[data-ap]'))) { S.sentMsg = b.dataset.ap === '1' ? `✅ เจ้าของอนุมัติ → ส่ง ${S.pending} ข้อความแล้ว · บันทึกในประวัติการส่ง` : '🚫 ยกเลิก → ไม่ส่งอะไร'; S.pending = 0; save(); return render(); }
+    if (t.id === 'btnTheme') { S.theme = S.theme === 'day' ? 'dark' : 'day'; save(); return render(); }
+    if (t.id === 'btnReset') { if (confirm('เริ่มเดโมใหม่ทั้งหมด? ข้อมูลที่ลองสั่งจะถูกล้าง')) { S = fresh(); save(); render(); window.scrollTo(0, 0); } }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+  render();
+})();
+</script>
+</body>
+</html>
